@@ -2,7 +2,7 @@ function onReady() {
   const addToDoForm = document.getElementById('addToDoForm');
   const newToDoText = document.getElementById('newToDoText');
   const toDoList = document.getElementById('toDoList');
-  const pasta = document.getElementById('pasta');
+  const deleteToDo = document.getElementById('deleteToDo');
 
   addToDoForm.addEventListener('submit', () => {
     event.preventDefault();
@@ -22,20 +22,19 @@ function onReady() {
     toDoList.appendChild(newLi);
 
     newToDoText.value = '';
-
-    console.log(toDoList.childNodes.length);
   });
 
-//   deleteToDo.addEventListener('button', () => {
-//     event.preventDefault();
-//
-//     for (i=toDoList.childNodes.length-1; i>=0; i--) {
-//       if (toDoList.childNodes[i][1].checked = true) {
-//         toDoList.removeChild(toDoList.childNodes[i])
-//       }
-//     }
-//   })
-// }
+  deleteToDo.addEventListener('submit', () => {
+    event.preventDefault();
+
+    for (i=toDoList.children.length-1; i>=0; i--) {
+      if (toDoList.children[i].lastChild.checked == true) {
+        toDoList.removeChild(toDoList.children[i])
+      }
+    }
+
+  });
+}
 
 window.onload = function() {
   alert("The window has loaded!");
