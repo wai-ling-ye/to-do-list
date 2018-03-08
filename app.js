@@ -1,71 +1,46 @@
 function onReady() {
+  const toDos= [];
   const addToDoForm = document.getElementById('addToDoForm');
-  const newToDoText = document.getElementById('newToDoText');
-  const toDoList = document.getElementById('toDoList');
-  const deleteToDo = document.getElementById('deleteToDo');
 
-  addToDoForm.addEventListener('submit', () => {
-    event.preventDefault();
+  function createNewToDo() {
+    const newToDoText = document.getElementById('newToDoText')
+    if (!newToDoText.value) {return;}
 
-    let title = newToDoText.value;
-    let newLi = document.createElement('li');
-    let primaryContent = document.createElement('span');
-
-    // The following lets are for the checkbox html
-    let secondaryContent = document.createElement('span');
-    let label = document.createElement('label');
-    let checkbox = document.createElement('input');
-    let num = toDoList.children.length;
-
-    newLi.className = "mdl-list__item";
-    // Primary Content - to-do text
-    primaryContent.className = "mdl-list__item-primary-content";
-    primaryContent.textContent = title;
-
-    // Secondary Content - checkbox
-    secondaryContent.className = "mdl-list__item-secondary-action";
-
-    label.className = "mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect";
-    label.htmlFor = "list-checkbox" + num;
-
-    checkbox.type = "checkbox";
-    checkbox.className = "mdl-checkbox__input";
-    checkbox.id = "list-checkbox" + num;
-
-    // Upgrade all MDL affected elements
-    componentHandler.upgradeElement(primaryContent);
-    componentHandler.upgradeElement(checkbox);
-
-    // Creating the checkbox space
-    label.appendChild(checkbox);
-    componentHandler.upgradeElement(label);
-    secondaryContent.appendChild(label);
-    componentHandler.upgradeElement(secondaryContent);
-
-    // Creating the list item
-    newLi.appendChild(primaryContent);
-    newLi.appendChild(secondaryContent);
-    componentHandler.upgradeElement(newLi);
-
-    // Adding the new item to the list
-    toDoList.appendChild(newLi);
+    toDos.push({
+      title: newToDoText.value,
+      complete: false
+    });
 
     newToDoText.value = '';
-  });
 
-  deleteToDo.addEventListener('submit', () => {
+    renderTheUI();
+  }
+
+  function renderTheUI() {
+    const toDoList = document.getElementById('toDoList');
+
+    toDoList.textContent = '';
+
+    .toDos.forEach(function(toDo) {
+      const newLi = document.createElement('li');
+      const checkbox = document.createElement('input');
+      checkbox.type = "checkbox";
+
+      newLi.textContent = toDo.title;
+
+      toDoList.appendChild(newLi);
+      newLi.appendChild(checkbox);
+    });
+  }
+
+  addToDoForm.addEventListener('submit', event => {
     event.preventDefault();
-
-    for (i=toDoList.children.length-1; i>=0; i--) {
-      if (toDoList.children[i].lastChild.firstChild.firstChild.checked == true) {
-        toDoList.removeChild(toDoList.children[i])
-      }
-    }
-
+    createNewToDo();
   });
+
+  renderTheUI();
 }
 
 window.onload = function() {
-  alert("The window has loaded!");
   onReady();
 };
