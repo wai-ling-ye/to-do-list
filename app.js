@@ -15,6 +15,7 @@ function onReady() {
     let secondaryContent = document.createElement('span');
     let label = document.createElement('label');
     let checkbox = document.createElement('input');
+    let num = toDoList.children.length;
 
     newLi.className = "mdl-list__item";
     // Primary Content - to-do text
@@ -25,11 +26,11 @@ function onReady() {
     secondaryContent.className = "mdl-list__item-secondary-action";
 
     label.className = "mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect";
-    label.htmlFor = "list-checkbox";
+    label.htmlFor = "list-checkbox" + num;
 
     checkbox.type = "checkbox";
     checkbox.className = "mdl-checkbox__input";
-    checkbox.id = "chkbox";
+    checkbox.id = "list-checkbox" + num;
 
     // Upgrade all MDL affected elements
     componentHandler.upgradeElement(primaryContent);

@@ -1,8 +1,30 @@
-/* body {
-  max-width: 360px;
-} */
+body{
+  background-color: #fafafa;
+}
+
+.wrapper {
+
+  margin: auto;
+}
+
+.wrapper,
+header,
+.header-custom {
+  min-width: 360px;
+  max-width: 756px;
+  padding-left: 1rem;
+}
 
 .bodyContent {
+  background-color: white;
+  overflow: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-bottom: 1rem;
   position: relative;
   top: 56px;
+}
+
+.button-custom {
+  float: right;
 }
