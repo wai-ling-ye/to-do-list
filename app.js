@@ -1,71 +1,78 @@
+let todos = [];
+const ADD_TODO_FORM = document.getElementById('addToDoForm');
+let delButton;
+
+let id = 0;
+
 function onReady() {
-  const addToDoForm = document.getElementById('addToDoForm');
-  const newToDoText = document.getElementById('newToDoText');
-  const toDoList = document.getElementById('toDoList');
-  const deleteToDo = document.getElementById('deleteToDo');
+  function createNewToDo() {
+    const NEW_TODO_TEXT = document.getElementById('newToDoText');
+    if (!NEW_TODO_TEXT.value) {return;}
 
-  addToDoForm.addEventListener('submit', () => {
+    todos.push({
+      title: NEW_TODO_TEXT.value,
+      complete: false,
+      id: id
+    });
+
+    id = id+1;
+
+    NEW_TODO_TEXT.value = '';
+
+    renderTheUI();
+  }
+
+  function renderTheUI() {
+    const toDoList = document.getElementById('toDoList');
+
+    toDoList.textContent = '';
+
+    todos.forEach(function(toDo) {
+      const NEW_LI = document.createElement('li');
+      const CHECKBOX = document.createElement('input');
+      const DEL_BUTTON = document.createElement('button')
+
+      CHECKBOX.type = "checkbox";
+
+      NEW_LI.textContent = toDo.title;
+      NEW_LI.setAttribute('data-item-number', toDo.id);
+
+      DEL_BUTTON.type = "button";
+      DEL_BUTTON.classList = "delButton mdl-button mdl-js-button mdl-button--raised";
+      DEL_BUTTON.textContent = "Delete";
+
+      NEW_LI.appendChild(CHECKBOX);
+      NEW_LI.appendChild(DEL_BUTTON);
+      toDoList.appendChild(NEW_LI);
+
+      DEL_BUTTON.addEventListener('click', function(){
+        var itemNumber = parseInt(this.parentElement.getAttribute('data-item-number'));
+        deleteEvent(itemNumber);
+      });
+    });
+  }
+
+  function deleteEvent(number) {
+    // look at our const todos
+    // we want to identify which todo needs to be removed
+    todos = todos.filter(function(item){
+      return item.id !== number;
+    })
+
+    renderTheUI();
+  }
+
+
+
+  ADD_TODO_FORM.addEventListener('submit', event => {
     event.preventDefault();
 
-    let title = newToDoText.value;
-    let newLi = document.createElement('li');
-    let primaryContent = document.createElement('span');
-
-    // The following lets are for the checkbox html
-    let secondaryContent = document.createElement('span');
-    let label = document.createElement('label');
-    let checkbox = document.createElement('input');
-    let num = toDoList.children.length;
-
-    newLi.className = "mdl-list__item";
-    // Primary Content - to-do text
-    primaryContent.className = "mdl-list__item-primary-content";
-    primaryContent.textContent = title;
-
-    // Secondary Content - checkbox
-    secondaryContent.className = "mdl-list__item-secondary-action";
-
-    label.className = "mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect";
-    label.htmlFor = "list-checkbox" + num;
-
-    checkbox.type = "checkbox";
-    checkbox.className = "mdl-checkbox__input";
-    checkbox.id = "list-checkbox" + num;
-
-    // Upgrade all MDL affected elements
-    componentHandler.upgradeElement(primaryContent);
-    componentHandler.upgradeElement(checkbox);
-
-    // Creating the checkbox space
-    label.appendChild(checkbox);
-    componentHandler.upgradeElement(label);
-    secondaryContent.appendChild(label);
-    componentHandler.upgradeElement(secondaryContent);
-
-    // Creating the list item
-    newLi.appendChild(primaryContent);
-    newLi.appendChild(secondaryContent);
-    componentHandler.upgradeElement(newLi);
-
-    // Adding the new item to the list
-    toDoList.appendChild(newLi);
-
-    newToDoText.value = '';
+    createNewToDo();
   });
 
-  deleteToDo.addEventListener('submit', () => {
-    event.preventDefault();
-
-    for (i=toDoList.children.length-1; i>=0; i--) {
-      if (toDoList.children[i].lastChild.firstChild.firstChild.checked == true) {
-        toDoList.removeChild(toDoList.children[i])
-      }
-    }
-
-  });
+  renderTheUI();
 }
 
 window.onload = function() {
-  alert("The window has loaded!");
   onReady();
 };
