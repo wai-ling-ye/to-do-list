@@ -1,61 +1,70 @@
+let todos = [];
+const ADD_TODO_FORM = document.getElementById('addToDoForm');
+let delButton;
+
+let id = 0;
+
 function onReady() {
-  const toDos = [];
-  const addToDoForm = document.getElementbyId('addToDoForm');
-  let delButton;
-
-  let id = 0;
-
   function createNewToDo() {
-    const newToDoText = document.getElementbyId('newToDoText';)
-    if (!newToDoText.value) {return;}
+    const NEW_TODO_TEXT = document.getElementById('newToDoText');
+    if (!NEW_TODO_TEXT.value) {return;}
 
-    toDos.push({
-      title: newToDoText.value,
+    todos.push({
+      title: NEW_TODO_TEXT.value,
       complete: false,
       id: id
     });
 
     id = id+1;
 
-    newToDoText.value = '';
+    NEW_TODO_TEXT.value = '';
 
     renderTheUI();
   }
 
   function renderTheUI() {
-    const toDoList = document.getElementbyId('toDoList');
+    const toDoList = document.getElementById('toDoList');
 
     toDoList.textContent = '';
 
-    toDos.forEach(function(toDo) {
-      const newLi = document.createElement('li');
-      const checkbox = document.createElement('input');
-      const delButton = document.createElement('button')
+    todos.forEach(function(toDo) {
+      const NEW_LI = document.createElement('li');
+      const CHECKBOX = document.createElement('input');
+      const DEL_BUTTON = document.createElement('button')
 
-      checkbox.type = "checkbox";
+      CHECKBOX.type = "checkbox";
 
-      newLi.textContent = toDo.title;
+      NEW_LI.textContent = toDo.title;
+      NEW_LI.setAttribute('data-item-number', toDo.id);
 
-      delButton.type = "button";
-      delButton.class = "delButton";
+      DEL_BUTTON.type = "button";
+      DEL_BUTTON.classList = "delButton mdl-button mdl-js-button mdl-button--raised";
+      DEL_BUTTON.textContent = "Delete";
 
-      newLi.appendChild(checkbox);
-      newLi.appendChild(delButton);
-      toDoList.appendChild(newLi);
+      NEW_LI.appendChild(CHECKBOX);
+      NEW_LI.appendChild(DEL_BUTTON);
+      toDoList.appendChild(NEW_LI);
 
-      delButton.onclick = deleteEvent(toDo);
+      DEL_BUTTON.addEventListener('click', function(){
+        var itemNumber = parseInt(this.parentElement.getAttribute('data-item-number'));
+        deleteEvent(itemNumber);
+      });
     });
   }
 
-  function deleteEvent(toDo) {
-    let toDelete = toDos.filter(toDo => toDo.id);
+  function deleteEvent(number) {
+    // look at our const todos
+    // we want to identify which todo needs to be removed
+    todos = todos.filter(function(item){
+      return item.id !== number;
+    })
 
     renderTheUI();
   }
 
 
 
-  addToDoForm.addEventListener('submit', event => {
+  ADD_TODO_FORM.addEventListener('submit', event => {
     event.preventDefault();
 
     createNewToDo();
